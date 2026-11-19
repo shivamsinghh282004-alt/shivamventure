@@ -1,0 +1,322 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated freelancer or SMB owner profile and Indian tax configuration.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the profile owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified Google account email address.",
+          "minLength": 3,
+          "maxLength": 254
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Full display name of the user.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Profile avatar URL from Google Auth.",
+          "maxLength": 500
+        },
+        "businessName": {
+          "type": "string",
+          "description": "Freelance practice or venture name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "city": {
+          "type": "string",
+          "description": "Primary operating city.",
+          "maxLength": 80
+        },
+        "taxRegime": {
+          "type": "string",
+          "enum": ["44ada", "new_regime"],
+          "description": "Indian income tax calculation mode: Section 44ADA presumptive 50% or standard New Regime."
+        },
+        "gstRegistered": {
+          "type": "boolean",
+          "description": "Whether the user has an active GST registration."
+        },
+        "annualTarget": {
+          "type": "number",
+          "description": "Target annual freelance revenue in INR."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated."
+        }
+      },
+      "required": [
+        "uid",
+        "email",
+        "displayName",
+        "photoURL",
+        "businessName",
+        "city",
+        "taxRegime",
+        "gstRegistered",
+        "annualTarget",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "IncomeEntry": {
+      "title": "IncomeEntry",
+      "description": "A freelance payment or invoice entry across clients and platforms.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "clientName": {
+          "type": "string",
+          "description": "Name of the client or payer.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["Direct UPI / Bank", "Upwork", "Fiverr", "Razorpay", "Stripe", "Other"],
+          "description": "Payment channel or freelance marketplace."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["Design", "Development", "Content & Video", "Tutoring", "Consulting", "Other"],
+          "description": "Service discipline."
+        },
+        "grossAmount": {
+          "type": "number",
+          "description": "Gross invoice or payout amount in INR."
+        },
+        "tdsAmount": {
+          "type": "number",
+          "description": "TDS deducted by client in INR."
+        },
+        "gstAmount": {
+          "type": "number",
+          "description": "GST charged on the invoice in INR."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["received", "pending"],
+          "description": "Payment settlement status."
+        },
+        "receivedDate": {
+          "type": "string",
+          "description": "Transaction or expected settlement date (YYYY-MM-DD).",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional invoice or milestone note.",
+          "maxLength": 400
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": [
+        "ownerId",
+        "clientName",
+        "platform",
+        "category",
+        "grossAmount",
+        "tdsAmount",
+        "gstAmount",
+        "status",
+        "receivedDate",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "WorkflowTask": {
+      "title": "WorkflowTask",
+      "description": "Automated follow-up, tax deadline, or client deliverable task.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Task headline.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "clientName": {
+          "type": "string",
+          "description": "Associated client or compliance authority.",
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "enum": ["Tax & GST", "Client Follow-up", "Deliverable", "Invoicing"],
+          "description": "Workflow bucket."
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Priority level."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["todo", "in_progress", "completed"],
+          "description": "Execution status."
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (YYYY-MM-DD).",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "amountLinked": {
+          "type": "number",
+          "description": "Optional INR value linked to this workflow item."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "clientName",
+        "category",
+        "priority",
+        "status",
+        "dueDate",
+        "amountLinked",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ClientRecord": {
+      "title": "ClientRecord",
+      "description": "Saved freelance client profile with tax scope and retainer details.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Client or agency name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["Direct UPI / Bank", "Upwork", "Fiverr", "Razorpay", "Stripe", "Other"],
+          "description": "Primary billing channel."
+        },
+        "billingType": {
+          "type": "string",
+          "enum": ["Retainer", "Milestone", "Hourly"],
+          "description": "Contract billing model."
+        },
+        "retainerAmount": {
+          "type": "number",
+          "description": "Standard invoice or monthly retainer value in INR."
+        },
+        "taxScope": {
+          "type": "string",
+          "enum": ["domestic_tds", "domestic_no_tds", "export_lut"],
+          "description": "Tax treatment for invoices to this client."
+        },
+        "contactNote": {
+          "type": "string",
+          "description": "Billing contact or cadence note.",
+          "maxLength": 240
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "platform",
+        "billingType",
+        "retainerAmount",
+        "taxScope",
+        "contactNote",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Owner-isolated user profile and tax configuration."
+    },
+    "/incomes/{incomeId}": {
+      "schema": { "$ref": "#/entities/IncomeEntry" },
+      "description": "Multi-client and multi-platform freelance income ledger entries."
+    },
+    "/workflows/{workflowId}": {
+      "schema": { "$ref": "#/entities/WorkflowTask" },
+      "description": "Automated follow-up, tax deadline, and deliverable workflow tasks."
+    },
+    "/clients/{clientId}": {
+      "schema": { "$ref": "#/entities/ClientRecord" },
+      "description": "Saved client directory with tax and billing configuration."
+    }
+  }
+}
